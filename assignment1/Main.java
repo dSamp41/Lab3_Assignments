@@ -17,26 +17,14 @@ public class Main {
         System.out.println("Dimensione pool: ");
         int size = Integer.parseInt(System.console().readLine());
 
-        System.out.println("Numero di thread: ");
-        int numThreads = Integer.parseInt(System.console().readLine());
+        System.out.println("Numero di task: ");
+        int numTasks = Integer.parseInt(System.console().readLine());
 
 
         ExecutorService taskExecutor = Executors.newFixedThreadPool(size);
-        for(int i=0; i<=numThreads; i++){
+        for(int i=0; i<numTasks; i++){
             taskExecutor.execute(new Task());
         }
         taskExecutor.shutdown();
-
-
-        /*
-        System.out.println("Numero di thread: ");
-        int numThreads = Integer.parseInt(System.console().readLine());
-
-        for(int i=0; i<numThreads; i++){
-            Task task = new Task();
-            Thread thread = new Thread(task);
-            thread.start();
-        }*/
-    
     }
 }

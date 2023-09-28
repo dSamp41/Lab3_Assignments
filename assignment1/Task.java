@@ -6,7 +6,7 @@ public class Task implements Runnable {
     private final int MAX = 1_000_000;
 
 
-    private void getPrimes(){
+    private void getPrimes(){ // ~O(n^2)
         ArrayList<Integer> primes = new ArrayList<Integer>();
         primes.add(2);
         primes.add(3);
