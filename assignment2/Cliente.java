@@ -1,15 +1,17 @@
-import java.util.Random;
+import java.util.concurrent.RejectedExecutionException;
 
 public class Cliente implements Runnable {
-    public void run(){
-        Random rand = new Random();
-        int sleepTime = rand.nextInt(5000); //sleep max 5 sec
+    int n;
 
+    public Cliente(int n){
+        this.n = n;
+    }
+    public void run(){
         try{
-            System.out.println("Handling mail");
-            Thread.sleep(sleepTime);
+            System.out.printf("Handling mail n. %d\n", n);
+            
         }
-        catch(Exception e){
+        catch(RejectedExecutionException e){
             System.out.println(e.getMessage());
         }
     }

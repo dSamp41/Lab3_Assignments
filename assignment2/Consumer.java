@@ -1,22 +1,23 @@
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Consumer implements Runnable{
     BlockingQueue<Runnable> blockingQueue;
+    ThreadPoolExecutor service;
 
-    public Consumer(BlockingQueue<Runnable> queue){
+    public Consumer(BlockingQueue<Runnable> queue, ThreadPoolExecutor pool){
         this.blockingQueue = queue;
+        this.service = pool;
     }
 
     public void run(){
-        for(int i=0; i<1000; i++){
+        while(true){
             try{
-                blockingQueue.add(new Cliente());
-                System.out.printf("Add Cliente %d\n", i);
+                service.execute(blockingQueue.take());
             }
             catch(Exception e){
                 System.out.println(e.getMessage());
             }
         }
-
     }
 }

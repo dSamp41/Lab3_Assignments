@@ -9,9 +9,10 @@ public class Producer implements Runnable{
 
     public void run(){
         //Filling salaAttesa (NON flusso continuo)
-        for(int i=0; i<1000; i++){
+        for(int i=0; i<100; i++){
             try{
-                blockingQueue.add(new Cliente());
+                Cliente c = new Cliente(i);
+                blockingQueue.add(c);
                 System.out.printf("Add Cliente %d\n", i);
             }
             catch(Exception e){
