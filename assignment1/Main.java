@@ -1,4 +1,4 @@
-package Assignments.Lab3_Assignments.assignment1;
+package Lab3_Assignments.assignment1;
 /*
 Scrivere una applicazione JAVA che:
     - crea e attiva n thread
