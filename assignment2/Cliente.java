@@ -8,11 +8,11 @@ public class Cliente implements Runnable {
     }
     public void run(){
         try{
-            System.out.printf("Handling mail n. %d\n", n);
-            
+            System.out.printf("Handling client %d\n", this.n);
         }
         catch(RejectedExecutionException e){
-            System.out.println(e.getMessage());
+            System.out.printf("\tTask Cliente %d rejected", n);
+            //System.out.println(e.getMessage());
         }
     }
 }

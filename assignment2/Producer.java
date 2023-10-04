@@ -13,7 +13,7 @@ public class Producer implements Runnable{
             try{
                 Cliente c = new Cliente(i);
                 blockingQueue.add(c);
-                System.out.printf("Add Cliente %d\n", i);
+                System.out.printf("Welcome client %d\n", i);
             }
             catch(Exception e){
                 System.out.println(e.getMessage());

@@ -1,5 +1,6 @@
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Consumer implements Runnable{
     BlockingQueue<Runnable> blockingQueue;
@@ -13,7 +14,16 @@ public class Consumer implements Runnable{
     public void run(){
         while(true){
             try{
-                service.execute(blockingQueue.take());
+                Runnable extractedTask = blockingQueue.poll(1, TimeUnit.SECONDS);
+                
+                if(extractedTask == null){
+                    System.out.println("No more Clients");
+                    service.shutdown();
+                    break;
+                }
+
+                service.execute(extractedTask);
+
             }
             catch(Exception e){
                 System.out.println(e.getMessage());
