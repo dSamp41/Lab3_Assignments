@@ -11,8 +11,7 @@ public class UfficioPostale {
 
         BlockingQueue<Runnable> salaAttesa = new LinkedBlockingQueue<>();
         BlockingQueue<Runnable> salaSportelli = new ArrayBlockingQueue<>(k);
-        ThreadPoolExecutor sportelli = new ThreadPoolExecutor(4, 4, 10, TimeUnit.MILLISECONDS, salaSportelli);
-
+        ThreadPoolExecutor sportelli = new ThreadPoolExecutor(4, 4, 10, TimeUnit.MILLISECONDS, salaSportelli, new BlockingPolicy());
         
         Producer producer = new Producer(salaAttesa);
         Consumer consumer = new Consumer(salaAttesa, sportelli);

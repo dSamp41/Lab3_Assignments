@@ -23,10 +23,10 @@ public class Consumer implements Runnable{
                 }
 
                 service.execute(extractedTask);
-
             }
             catch(Exception e){
-                System.out.println(e.getMessage());
+                System.out.println("\tCliente task rejected; saturated ThreadPool");                
+                //System.out.println(e.getMessage());
             }
         }
     }
