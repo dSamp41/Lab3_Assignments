@@ -1,17 +1,27 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class User implements Runnable{
     int priority;
+    int k;
+    int id;
+
+    String who;
+    final int maxMillis = 1000;
     
     public void run(){
-        Random random = new Random();
-        long time = random.nextInt(1000);
-        
+        long time = ThreadLocalRandom.current().nextLong(1, maxMillis);
+        System.out.printf("%s %d entered in lab\n", who, id);
         try {
             Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } 
+        catch (InterruptedException e) {
+            System.err.println("Interrupted sleep");
         }
+        finally{
+            System.out.printf("%s %d left lab\n", who, id);
+        }
+
+
     }
 
 }
