@@ -19,17 +19,18 @@ public class Zipper{
 
                 //for every file, wrap in a task and submit to pool
                 for(String f: dirList){
-                    File file = new File(f);
-                    if(file.isFile()){
-                        ZipTask task = new ZipTask(f);
-                        pool.submit(task);
-                    }
-                }
+                    String fullName = dir + "/" + f;
+                    File file = new File(fullName);
+                    System.out.printf("File: %s \n", fullName);
 
+                    if(!file.isDirectory()){
+                        pool.execute(new ZipTask(file));
+                    }
+                    
+                }
             }
         }
 
         pool.shutdown();
-
     }
 }
