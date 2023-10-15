@@ -2,14 +2,15 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class User implements Runnable{
     int priority;
-    int k;
     int id;
+    int k;      //num volte accesso in lab
 
     String who;
     final int maxMillis = 1000;
     
     public void run(){
         long time = ThreadLocalRandom.current().nextLong(1, maxMillis);
+        
         System.out.printf("%s %d entered in lab\n", who, id);
         try {
             Thread.sleep(time);
@@ -20,8 +21,6 @@ public abstract class User implements Runnable{
         finally{
             System.out.printf("%s %d left lab\n", who, id);
         }
-
-
     }
 
 }
