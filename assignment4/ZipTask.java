@@ -21,8 +21,8 @@ public class ZipTask implements Runnable {
         {  
             int len = (int) this.inpFile.length();
             byte[] buffer = new byte[len];
-            int nRead = fis.read(buffer);
-
+            
+            fis.read(buffer);
             gos.write(buffer, 0, len);
             
             //this.inpFile.delete();
