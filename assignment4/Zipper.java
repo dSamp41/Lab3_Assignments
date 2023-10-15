@@ -17,9 +17,13 @@ public class Zipper{
             if(dir.exists() && dir.isDirectory()){
                 String[] dirList = dir.list();
 
+                //for every file, wrap in a task and submit to pool
                 for(String f: dirList){
-                    ZipTask task = new ZipTask(f);
-                    pool.submit(task);
+                    File file = new File(f);
+                    if(file.isFile()){
+                        ZipTask task = new ZipTask(f);
+                        pool.submit(task);
+                    }
                 }
 
             }
