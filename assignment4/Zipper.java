@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Zipper{
     public static void main(String[] args){
@@ -11,13 +11,15 @@ public class Zipper{
         }
 
         ExecutorService pool = Executors.newCachedThreadPool();
-        ConcurrentLinkedQueue<String> dirList = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedDeque<String> dirList = new ConcurrentLinkedDeque<>();
         for(String d: args){
             dirList.add(d);
         }
 
-        for(String dirName: dirList){
+        while(!dirList.isEmpty()){
+            String dirName = dirList.removeFirst();
             File dir = new File(dirName);
+            System.out.printf("Directory: %s\n", dir.getName());
 
             if(dir.exists() && dir.isDirectory()){
                 String[] fileList = dir.list();
@@ -30,8 +32,8 @@ public class Zipper{
 
                     //handle file/directory
                     if(file.isDirectory()){
-                        System.out.printf("Adding %s to dirList\n", f);
-                        dirList.add(f);
+                        System.out.printf("Adding %s to dirList\n", fullName);
+                        dirList.addFirst(fullName);
                     }
                     else{
                         pool.execute(new ZipTask(file));
