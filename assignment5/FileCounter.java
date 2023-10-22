@@ -1,5 +1,5 @@
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,21 +13,15 @@ public class FileCounter implements Runnable{
     }
 
     public void run(){
-        try {  
-            String fileText = readFile(file).replaceAll("[0-9]", "");
+        String fileText = readFile(file).replaceAll("[0-9]", "");
 
-            for(int i=0; i<fileText.length(); i++){
-                char c = fileText.charAt(i);
-                this.map.computeIfPresent(c, (k, v) -> v+1);
-            }
-        }
-        catch(IOException e){
-            e.printStackTrace();
+        for(int i=0; i<fileText.length(); i++){
+            char c = fileText.charAt(i);
+            this.map.computeIfPresent(c, (k, v) -> v+1);
         }
     }
 
-    private String readFile(File file) throws IOException {
-
+    private String readFile(File file) {
         StringBuilder fileContents = new StringBuilder((int)file.length());        
 
         try (Scanner scanner = new Scanner(file)) {
@@ -35,6 +29,10 @@ public class FileCounter implements Runnable{
                 fileContents.append(scanner.nextLine() + System.lineSeparator());
             }
             return fileContents.toString();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Il file non è stato trovato");
+            return "";
         }
     }
 
