@@ -13,7 +13,7 @@ public class Main{
             return ;
         }
         
-        ExecutorService pool = Executors.newFixedThreadPool(1);
+        ExecutorService pool = Executors.newCachedThreadPool();
         ConcurrentHashMap<Character, Integer> c = new ConcurrentHashMap<>();
         
         
@@ -28,12 +28,16 @@ public class Main{
             File f = new File(path);
             pool.submit(new FileCounter(f, c));
         }
-        pool.submit(new OutputWriter(c));
 
         pool.shutdown();
+
+        while(!pool.isTerminated()){
+            //System.out.println("Waiting for termination");
+        }
+        writeMapToFile(c);
     }
 
-    /*private static void writeMapToFile(ConcurrentHashMap<Character, Integer> c){
+    private static void writeMapToFile(ConcurrentHashMap<Character, Integer> c){
         String outputName = "output_log.txt";
         try(DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputName))){
             for(Map.Entry<Character, Integer> entry: c.entrySet()){
@@ -45,7 +49,7 @@ public class Main{
         catch(Exception e){
             System.err.println(e.getMessage());
         }
-    }*/
+    }
 
     
 }
