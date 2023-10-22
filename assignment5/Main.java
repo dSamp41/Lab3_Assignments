@@ -38,18 +38,18 @@ public class Main{
     }
 
     private static void writeMapToFile(ConcurrentHashMap<Character, Integer> c){
-        String outputName = "output_log.txt";
+        final String outputName = "output_log.txt";
+
         try(DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputName))){
             for(Map.Entry<Character, Integer> entry: c.entrySet()){
                 String line = entry.getKey() + ", " + Integer.toString(entry.getValue()) + "\n";
                 outputStream.writeChars(line);
             }
+            
             System.out.println("Output file created successfully!");
         }
         catch(Exception e){
             System.err.println(e.getMessage());
         }
-    }
-
-    
+    }    
 }

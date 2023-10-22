@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,8 +13,7 @@ public class FileCounter implements Runnable{
     }
 
     public void run(){
-        try(FileInputStream fis = new FileInputStream(file))
-        {  
+        try {  
             String fileText = readFile(file).replaceAll("[0-9]", "");
 
             for(int i=0; i<fileText.length(); i++){
