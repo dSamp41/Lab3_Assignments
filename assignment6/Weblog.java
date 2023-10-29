@@ -15,7 +15,6 @@ public class Weblog {
 
         File log = new File(args[0]);
         
-
         try(BufferedReader reader = new BufferedReader(new FileReader(log))){
             String line = reader.readLine();
 
@@ -39,9 +38,7 @@ public class Weblog {
 
         try{
             InetAddress address = InetAddress.getByName(addrStr);
-            String a = address.getHostName();
-
-            strArr[0] = a;
+            strArr[0] = address.getHostName();
 
             System.out.println(String.join(" ", strArr));
         }
