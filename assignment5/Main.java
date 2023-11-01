@@ -1,6 +1,9 @@
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -40,16 +43,16 @@ public class Main{
     private static void writeMapToFile(ConcurrentHashMap<Character, Integer> c){
         final String outputName = "output_log.txt";
 
-        try(DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputName))){
+        try(FileWriter outputWriter = new FileWriter(outputName)){
             for(Map.Entry<Character, Integer> entry: c.entrySet()){
                 String line = entry.getKey() + ", " + Integer.toString(entry.getValue()) + "\n";
-                outputStream.writeChars(line);
+                outputWriter.write(line);
             }
             
             System.out.println("Output file created successfully!");
-        }
-        catch(Exception e){
+
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-    }    
+    }   
 }

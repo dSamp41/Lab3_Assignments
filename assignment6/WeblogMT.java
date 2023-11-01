@@ -9,8 +9,8 @@ public class WeblogMT {
     
 
     public static void main(String[] args){
-        ExecutorService pool = Executors.newCachedThreadPool();
-
+        int numCores = Runtime.getRuntime().availableProcessors(); // Get the number of available cores
+        ExecutorService pool = Executors.newFixedThreadPool(numCores);
 
         if(args.length < 1){
             System.err.println("Inserire nome del file");
@@ -36,9 +36,5 @@ public class WeblogMT {
         finally{
             pool.shutdown();
         }
-        
-
     }
-
-    
 } 
