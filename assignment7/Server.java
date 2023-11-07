@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+//Ass: game in locale
+
 public class Server{
     private static final int PORT = 7777;
     private static final int numThreads = 10;
@@ -22,13 +24,15 @@ public class Server{
         }
     }
 
-
+    //Simulazione game
     private static class Player implements Runnable{
         Socket socket;
 
         public Player(Socket s){
             this.socket = s;
         }
-        public void run(){}
+        public void run(){
+            System.out.println("New player: " + socket);
+        }
     }
 }
