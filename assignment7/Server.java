@@ -18,7 +18,7 @@ public class Server{
             ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 
             while(true){
-                pool.execute(new Player(server.accept()));
+                pool.execute(new Game(server.accept()));
             }
         }
         catch(IOException e){
@@ -27,18 +27,25 @@ public class Server{
     }
 
     //Simulazione game
-    private static class Player implements Runnable{
+    private static class Game implements Runnable{
         Socket socket;
+        GameInstance game = new GameInstance();
 
-        public Player(Socket s){
+        public Game(Socket s){
             this.socket = s;
         }
+
         public void run(){
             System.out.println("New player: " + socket);
-
+            
             try(Scanner in = new Scanner(socket.getInputStream());
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)){
                 while(in.hasNextLine()){
+                    if(game.getState() == "WIN"){
+                        out.println("YOU WON");
+                        out.println("Wanna play again? [y/n]");
+                    }
+                    
                     out.println(translateCommand(in.nextLine()));
                 }
             }
@@ -50,11 +57,16 @@ public class Server{
         private String translateCommand(String s){
             switch (s) {
                 case "1":
-                    return "Fight";
+                    game.fight();
+                    return game.toString();
                 case "2":
-                    return "Drink";
+                    game.usePotion();
+                    return game.toString();
                 case "3":
-                    return "Quit";    
+                    return "Quit";
+                case "y":
+                    game.newGame();
+
                 default:
                     return "Invalid";
             }

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Client {
     private static final int PORT = 7777;
-    private static final String[] commands = {"1", "2", "3"};
+    //private static final String[] commands = {"1", "2", "3"};
     public static void main(String[] args){
         InetAddress local;
 
@@ -26,18 +26,33 @@ public class Client {
             in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-            boolean end = false;
-
-            while(!end){
+            while(true){
                 String line = scanner.nextLine();
                 out.println(line);
+
+                if(line.contentEquals("1")){
+                    System.out.println("Fighting...");
+                }
+
+                if(line.contentEquals("2")){
+                    System.out.println("Drinking...");
+                }
+                
+                if(line.contentEquals("3")){
+                    System.out.println("Quitting...");
+                    socket.close();
+                    break;
+                }
+
                 System.out.println(in.nextLine());
 
             }
 
 
         }
-        catch(IOException e){}
+        catch(IOException e){
+            System.err.println(e.getMessage());
+        }
     }
     
 }
