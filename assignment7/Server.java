@@ -1,6 +1,8 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,6 +35,29 @@ public class Server{
         }
         public void run(){
             System.out.println("New player: " + socket);
+
+            try(Scanner in = new Scanner(socket.getInputStream());
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)){
+                while(in.hasNextLine()){
+                    out.println(translateCommand(in.nextLine()));
+                }
+            }
+            catch(IOException e){
+                System.err.println(e.getMessage());
+            }
+        }
+
+        private String translateCommand(String s){
+            switch (s) {
+                case "1":
+                    return "Fight";
+                case "2":
+                    return "Drink";
+                case "3":
+                    return "Quit";    
+                default:
+                    return "Invalid";
+            }
         }
     }
 }
