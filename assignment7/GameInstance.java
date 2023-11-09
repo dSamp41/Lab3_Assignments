@@ -1,19 +1,11 @@
 public class GameInstance {
-    enum GameState {
-        PLAYING,
-        WIN,
-        LOST
-    }
-    
-    Player p;
-    Monster m;
-    GameState state;
+    private Player p;
+    private Monster m;
     
 
     public GameInstance(){
         this.p = new Player();
         this.m = new Monster();
-        this.state = GameState.PLAYING;
     }
 
     public void newGame(){
@@ -22,20 +14,18 @@ public class GameInstance {
             this.state = GameState.PLAYING;
         }*/
         this.m = new Monster();
-        this.state = GameState.PLAYING;
     }
 
-    public void fight(){
-        m.fight();
-        if(m.getHp() <= 0){
-            this.state = GameState.WIN;
+    public void fight(){    //FIGHT = player attacks, then monster attacks
+        m.getDamage();
+        if(m.getHp() < 1){
             return;
         }
 
         //if monster is still alive => player can receive damage
-        p.fight();
-        if(p.getHp() <= 0){
-            this.state = GameState.LOST;
+        p.getDamage();
+        if(p.getHp() < 1){
+            return;
         }
     }
     
@@ -43,9 +33,6 @@ public class GameInstance {
         p.drink();
     }
 
-    public String getState(){
-        return this.state.toString();
-    }
 
     public String toString(){
         String pStatus = "Player: hp=" + p.getHp() + " potions=" + p.getPotions() + "\t\t";

@@ -12,16 +12,20 @@ public class Player {
         this.potions = ThreadLocalRandom.current().nextInt(7, MAX_POTIONS);
     }
 
-    public void fight(){
+    public void getDamage(){
         int n = ThreadLocalRandom.current().nextInt(1, MAX_HP/3);
         this.hp -= n;
     }
 
     public void drink(){
-        if(this.potions >= 1){
+        if(this.potions >= 2){
             int num = ThreadLocalRandom.current().nextInt(1, this.potions);
             this.hp += num;
             this.potions -= num;
+        }
+        else if(this.potions == 1){
+            this.hp += 1;
+            this.potions -= 1;
         }
         else{
             System.out.println("No more potions");

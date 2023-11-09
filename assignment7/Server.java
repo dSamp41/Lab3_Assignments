@@ -6,16 +6,14 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//Ass: game in locale
-
+//game in locale
 public class Server{
     private static final int PORT = 7777;
-    private static final int numThreads = 10;
 
     public static void main(String[] args){
         try(ServerSocket server = new ServerSocket(PORT)){
             System.out.println("Welcome to Dungeon Adventures!");
-            ExecutorService pool = Executors.newFixedThreadPool(numThreads);
+            ExecutorService pool = Executors.newCachedThreadPool();
 
             while(true){
                 pool.execute(new Game(server.accept()));
@@ -44,44 +42,8 @@ public class Server{
                 out.println("Game:\t\t" + game.toString());
 
                 while(in.hasNextLine()){
-                    if(game.getState() == "WIN"){
-                        out.println("YOU WON\tWanna play again? [y/n]");
-                    }
-
-                    if(game.getState() == "LOST"){
-                        out.println("YOU LOST");
-                        break;
-                    }
-
                     //command processing 
-                    switch (in.nextLine()) {
-                        case "1":
-                            game.fight();
-                            out.println("Fighting:\t" + game.toString());
-                            break;
-                        case "2":
-                            game.usePotion();
-                            out.println("Drinking:\t"  + game.toString());
-                            break;
-                        case "3":
-                            out.println("Quitting...");
-                            clientSocket.close();
-                            break;
-
-                        case "y":
-                            game.newGame();
-                            out.println("New game:\t"  + game.toString());
-                            break;
-
-                        case "n":
-                            out.println("See you again!");
-                            clientSocket.close();
-                            break;
-
-                        default:
-                            out.println("Invalid command");
-                            break;
-                    }
+                    processCommand(in, out);
                 }
             }
             catch(IOException e){
@@ -89,6 +51,45 @@ public class Server{
             }
             finally{
                 System.out.println("A player left: " + clientSocket);
+            }
+        }
+
+        private void processCommand(Scanner in, PrintWriter out) {
+            switch (in.nextLine()) {
+                case "1":
+                    game.fight();
+                    out.println("Fighting:\t" + game.toString());
+                    break;
+                case "2":
+                    game.usePotion();
+                    out.println("Drinking:\t"  + game.toString());
+                    break;
+                case "3":
+                    //out.println("Quitting...");
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case "y":
+                    game.newGame();
+                    out.println("New game:\t"  + game.toString());
+                    break;
+
+                case "n":
+                    out.println("See you again!");
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                default:
+                    out.println("Invalid command");
+                    break;
             }
         }
     }

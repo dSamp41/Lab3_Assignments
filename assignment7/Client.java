@@ -19,11 +19,11 @@ public class Client {
             return;
         }
 
-        BufferedReader userInput, in = null;
-        try(Socket socket = new Socket(local, PORT)){
-            userInput = new BufferedReader(new InputStreamReader(System.in));
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try(Socket socket = new Socket(local, PORT);
+            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        ){
             
             System.out.println("Welcome player, these are your actions\n1: fight\t2: drink potion \t3: quit");
 
@@ -35,20 +35,25 @@ public class Client {
                     //socket.close();
                     break;
                 }
-                if(serverResponse.contains("hp=-")){
+                if(serverResponse.contains("Monster: hp=-") || serverResponse.contains("Monster: hp=0")){
                     System.out.println("YOU WON\tWanna play again?[y/n] ");
+                    out.println(userInput.readLine());
                     continue;
                 }
+                if(serverResponse.contains("Player: hp=-") || serverResponse.contains("Player: hp=0")){
+                    System.out.println("YOU LOST\tSee you next time");
+                    break;
+                }
                 else{
-                    System.out.println("Server\t" + serverResponse);
+                    System.out.println(serverResponse);
                 }
 
                 //handle client input
                 System.out.print("Insert a command: ");
                 String userInputStr = userInput.readLine();
                 if(userInputStr.contentEquals("3") || userInputStr.contentEquals("n")){
-                    socket.close();
-                    System.out.println("Quitting...");
+                    //socket.close();
+                    //System.out.println("Quitting...");
                     break;
                 }
                 out.println(userInputStr);  //send to server
@@ -56,7 +61,10 @@ public class Client {
             }
         }
         catch(IOException e){
-            System.err.println(e.getMessage());
+            System.err.println(e.getMessage() + ": Server non trovato");
+        }
+        finally{
+            System.out.println("Quitting...");
         }
     }
 }
