@@ -28,17 +28,29 @@ public class Client {
             System.out.println("Welcome player, these are your actions\n1: fight\t2: drink potion \t3: quit");
 
             while(true){
-                //System.out.println("####0");
-
+                //handle server response
                 String serverResponse = in.readLine();
+                
                 if(serverResponse.contentEquals("See you again!")){
                     //socket.close();
                     break;
                 }
-                System.out.println("Server\t" + serverResponse);
+                if(serverResponse.contains("hp=-")){
+                    System.out.println("YOU WON\tWanna play again?[y/n] ");
+                    continue;
+                }
+                else{
+                    System.out.println("Server\t" + serverResponse);
+                }
 
-
+                //handle client input
+                System.out.print("Insert a command: ");
                 String userInputStr = userInput.readLine();
+                if(userInputStr.contentEquals("3") || userInputStr.contentEquals("n")){
+                    socket.close();
+                    System.out.println("Quitting...");
+                    break;
+                }
                 out.println(userInputStr);  //send to server
                
             }
@@ -47,5 +59,4 @@ public class Client {
             System.err.println(e.getMessage());
         }
     }
-    
 }

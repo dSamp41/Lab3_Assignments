@@ -41,7 +41,6 @@ public class Server{
             try(Scanner in = new Scanner(clientSocket.getInputStream());
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)){
                 
-                /*out.print("Welcome player, these are your actions\n1: fight\t2: drink potion \t3: quit\n");*/
                 out.println("Game:\t\t" + game.toString());
 
                 while(in.hasNextLine()){
@@ -71,7 +70,7 @@ public class Server{
 
                         case "y":
                             game.newGame();
-                            out.println("New game");
+                            out.println("New game:\t"  + game.toString());
                             break;
 
                         case "n":
@@ -80,13 +79,16 @@ public class Server{
                             break;
 
                         default:
-                            out.println("Invalid");
+                            out.println("Invalid command");
                             break;
                     }
                 }
             }
             catch(IOException e){
                 System.err.println(e.getMessage());
+            }
+            finally{
+                System.out.println("A player left: " + clientSocket);
             }
         }
     }
