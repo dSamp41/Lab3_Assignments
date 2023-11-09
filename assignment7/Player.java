@@ -18,7 +18,7 @@ public class Player {
     }
 
     public void drink(){
-        if(this.potions > 0){
+        if(this.potions >= 1){
             int num = ThreadLocalRandom.current().nextInt(1, this.potions);
             this.hp += num;
             this.potions -= num;

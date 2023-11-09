@@ -28,47 +28,65 @@ public class Server{
 
     //Simulazione game
     private static class Game implements Runnable{
-        Socket socket;
+        Socket clientSocket;
         GameInstance game = new GameInstance();
 
         public Game(Socket s){
-            this.socket = s;
+            this.clientSocket = s;
         }
 
         public void run(){
-            System.out.println("New player: " + socket);
+            System.out.println("New player: " + clientSocket);
             
-            try(Scanner in = new Scanner(socket.getInputStream());
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)){
+            try(Scanner in = new Scanner(clientSocket.getInputStream());
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)){
+                
+                /*out.print("Welcome player, these are your actions\n1: fight\t2: drink potion \t3: quit\n");*/
+                out.println("Game:\t\t" + game.toString());
+
                 while(in.hasNextLine()){
                     if(game.getState() == "WIN"){
-                        out.println("YOU WON");
-                        out.println("Wanna play again? [y/n]");
+                        out.println("YOU WON\tWanna play again? [y/n]");
                     }
-                    
-                    out.println(translateCommand(in.nextLine()));
+
+                    if(game.getState() == "LOST"){
+                        out.println("YOU LOST");
+                        break;
+                    }
+
+                    //command processing 
+                    switch (in.nextLine()) {
+                        case "1":
+                            game.fight();
+                            out.println("Fighting:\t" + game.toString());
+                            break;
+                        case "2":
+                            game.usePotion();
+                            out.println("Drinking:\t"  + game.toString());
+                            break;
+                        case "3":
+                            out.println("Quitting...");
+                            clientSocket.close();
+                            break;
+
+                        case "y":
+                            game.newGame();
+                            out.println("New game");
+                            break;
+
+                        case "n":
+                            out.println("See you again!");
+                            clientSocket.close();
+                            break;
+
+                        default:
+                            out.println("Invalid");
+                            break;
+                    }
                 }
             }
             catch(IOException e){
                 System.err.println(e.getMessage());
-            }
-        }
-
-        private String translateCommand(String s){
-            switch (s) {
-                case "1":
-                    game.fight();
-                    return game.toString();
-                case "2":
-                    game.usePotion();
-                    return game.toString();
-                case "3":
-                    return "Quit";
-                case "y":
-                    game.newGame();
-
-                default:
-                    return "Invalid";
             }
         }
     }

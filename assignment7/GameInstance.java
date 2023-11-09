@@ -19,6 +19,7 @@ public class GameInstance {
     public void newGame(){
         if(m.getHp() <= 0){
             this.m = new Monster();
+            this.state = GameState.PLAYING;
         }
     }
 
