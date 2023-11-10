@@ -9,11 +9,8 @@ public class GameInstance {
     }
 
     public void newGame(){
-        /*if(m.getHp() <= 0){
-            this.m = new Monster();
-            this.state = GameState.PLAYING;
-        }*/
         this.m = new Monster();
+        this.p.setPotions(this.p.getPotions() + 5);
     }
 
     public void fight(){    //FIGHT = player attacks, then monster attacks
