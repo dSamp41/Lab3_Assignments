@@ -1,13 +1,12 @@
-//Simulazione game
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+//Simulazione game
 public class Game implements Runnable{
-    Socket clientSocket;
-    GameInstance game = new GameInstance();
+    private Socket clientSocket;
+    private GameInstance game = new GameInstance();
 
     public Game(Socket s){
         this.clientSocket = s;
@@ -45,7 +44,6 @@ public class Game implements Runnable{
                 out.println("Drinking:\t"  + game.toString());
                 break;
             case "3":
-                //out.println("Quitting...");
                 try {
                     clientSocket.close();
                 } catch (IOException e) {

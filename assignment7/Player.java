@@ -1,14 +1,13 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Player {
-    private int hp;
+public class Player extends Character{
+    private static final int MAX_HP = 10;
+    private static final int MAX_POTIONS = 20;
+    
     private int potions;
 
-    private final int MAX_HP = 10;
-    private final int MAX_POTIONS = 20;
-
     public Player(){
-        this.hp = ThreadLocalRandom.current().nextInt(5, MAX_HP);
+        super(MAX_HP);
         this.potions = ThreadLocalRandom.current().nextInt(7, MAX_POTIONS);
     }
 
@@ -30,10 +29,6 @@ public class Player {
         else{
             System.out.println("No more potions");
         }
-    }
-
-    public int getHp(){
-        return this.hp;
     }
 
     public int getPotions(){
