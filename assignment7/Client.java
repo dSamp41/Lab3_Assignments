@@ -5,10 +5,14 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client {
     private static final int PORT = 7777;
-    //private static final String[] commands = {"1", "2", "3"};
+    private static final List<String> gameCommands = Arrays.asList("1", "2", "3");
+    private static final List<String> newGameCommands= Arrays.asList("y", "n");
+
     public static void main(String[] args){
         InetAddress local;
 
@@ -32,12 +36,16 @@ public class Client {
                 String serverResponse = in.readLine();
                 
                 if(serverResponse.contentEquals("See you again!")){
-                    //socket.close();
                     break;
                 }
                 if(serverResponse.contains("Monster: hp=-") || serverResponse.contains("Monster: hp=0")){
-                    System.out.println("YOU WON\tWanna play again?[y/n] ");
-                    out.println(userInput.readLine());
+                    String userInputStr;
+                    do {    
+                        System.out.println("YOU WON\tWanna play again?[y/n]");
+                        userInputStr = userInput.readLine();
+                    } while (!newGameCommands.contains(userInputStr));
+
+                    out.println(userInputStr);
                     continue;
                 }
                 if(serverResponse.contains("Player: hp=-") || serverResponse.contains("Player: hp=0")){
@@ -49,15 +57,16 @@ public class Client {
                 }
 
                 //handle client input
-                System.out.print("Insert a command: ");
-                String userInputStr = userInput.readLine();
+                String userInputStr;
+                do {
+                    System.out.print("Insert a command: ");
+                    userInputStr = userInput.readLine();
+                } while (!gameCommands.contains(userInputStr));
+
                 if(userInputStr.contentEquals("3") || userInputStr.contentEquals("n")){
-                    //socket.close();
-                    //System.out.println("Quitting...");
                     break;
                 }
-                out.println(userInputStr);  //send to server
-               
+                out.println(userInputStr);  //send to server               
             }
         }
         catch(IOException e){
