@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
@@ -21,8 +22,9 @@ public class Copy{
         try(ReadableByteChannel source = Channels.newChannel(new FileInputStream(f));
             WritableByteChannel dest = Channels.newChannel(new FileOutputStream(outName))
         ){
-            directBufferCopy(source, dest);
-            indirectBufferCopy(source, dest);
+            //directBufferCopy(source, dest);
+            //indirectBufferCopy(source, dest);
+            //transferCopy(args[0], outName);
         }
         catch(IOException e){
             System.err.println(e.getMessage());
@@ -53,9 +55,20 @@ public class Copy{
         while(buffer.hasRemaining()){dest.write(buffer);}
     }
 
-    //TODO
-    private static void transferCopy(ReadableByteChannel src, WritableByteChannel dest) throws IOException{
-        
+    private static void transferCopy(String inpPath, String outPath){
+        try(FileInputStream fromFile = new FileInputStream(inpPath);
+            FileOutputStream toFile = new FileOutputStream(outPath);
+        ){
+            FileChannel fromChannel = fromFile.getChannel();
+            FileChannel toChannel = toFile.getChannel();
+            
+            long position = 0;
+            long count = fromChannel.size();
+            toChannel.transferFrom(fromChannel, position, count);
+        } 
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     //TODO
