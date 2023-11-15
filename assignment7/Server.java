@@ -9,7 +9,7 @@ public class Server{
 
     public static void main(String[] args){
         try(ServerSocket server = new ServerSocket(PORT)){
-            System.out.println("Welcome to Dungeon Adventures!");
+            System.out.println("Dungeon Adventures Server is running!");
             ExecutorService pool = Executors.newCachedThreadPool();
 
             while(true){
