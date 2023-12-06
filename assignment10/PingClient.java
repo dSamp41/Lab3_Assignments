@@ -66,16 +66,17 @@ public class PingClient {
             
             //output statistics
             System.out.println("---- PING Statistics ----");
-            System.out.printf("%d packets transmitted, %d packets received, %f packet loss\n", numPackets, RTTs.size(), RTTs.size()/numPackets);
+            float pct = (float) RTTs.size() / numPackets;
+            System.out.printf("%d packets transmitted, %d packets received, %f packet loss\n", numPackets, RTTs.size(), pct);
             
-            long min = Collections.min(RTTs);
-            long max = Collections.max(RTTs);
+            long min = !RTTs.isEmpty() ? Collections.min(RTTs) : 0;
+            long max = !RTTs.isEmpty() ? Collections.max(RTTs) : 0;
             double avg = RTTs.stream()
                 .mapToDouble(a -> a)
                 .average()
                 .orElse(0.0);
         
-            System.out.printf("round-trip (ms) min/avg/max = %d/%f/%d\n", min, avg, max);
+            System.out.printf("round-trip (ms) min/avg/max = %d/%.2f/%d\n", min, avg, max);
         } 
         catch (IOException e) {
             System.err.println(e.getMessage());
