@@ -34,10 +34,10 @@ public class PingClient {
         try(DatagramSocket socket = new DatagramSocket(0)) {
             socket.setSoTimeout(timeoutMillis);
 
-            ArrayList<Long> RTTs = new ArrayList<Long>();
             InetAddress address = InetAddress.getByName(HOSTNAME);
             DatagramPacket request, response;
-
+            
+            ArrayList<Long> RTTs = new ArrayList<Long>();
             int numPackets = 10;
 
             for(int seqNo = 0; seqNo<numPackets; seqNo++){
@@ -55,7 +55,7 @@ public class PingClient {
                     long responseTimestamp = System.currentTimeMillis();
                     long delta = responseTimestamp - requestTimestamp;
 
-                    System.out.printf("%s RTT: %l ms\n", requestMsg, delta);
+                    System.out.printf("%s RTT: %d ms\n", requestMsg, delta);
 
                     RTTs.add(delta);
                 } 
@@ -65,9 +65,9 @@ public class PingClient {
             }
             
             //output statistics
-            System.out.println("---- PING Statistics ----");
-            float pct = (float) RTTs.size() / numPackets;
-            System.out.printf("%d packets transmitted, %d packets received, %f packet loss\n", numPackets, RTTs.size(), pct);
+            System.out.println("\n---- PING Statistics ----");
+            float pct = (float) (numPackets - RTTs.size()) / numPackets;
+            System.out.printf("%d packets transmitted, %d packets received, %.2f%% packet loss\n", numPackets, RTTs.size(), pct);
             
             long min = !RTTs.isEmpty() ? Collections.min(RTTs) : 0;
             long max = !RTTs.isEmpty() ? Collections.max(RTTs) : 0;
